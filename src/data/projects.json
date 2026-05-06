@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ads-console",
+    "title": "Advertising Campaign Console",
+    "description": "Campaign management and reporting for advertising workflows.",
+    "status": "active",
+    "owner": "Team Aurora",
+    "updatedAt": "2026-03-12T14:22:00.000Z",
+    "tags": ["ads", "reporting", "metrics"]
+  },
+  {
+    "id": "clips-editor",
+    "title": "Short-form Clips Editor",
+    "description": "Short-form video editing and publishing pipeline.",
+    "status": "active",
+    "owner": "Team Byte",
+    "updatedAt": "2026-04-01T09:10:00.000Z",
+    "tags": ["video", "editor", "publish"]
+  },
+  {
+    "id": "audit-log",
+    "title": "Portfolio Audit Log",
+    "description": "Read-only audit trail for project metadata changes.",
+    "status": "paused",
+    "owner": "Team Core",
+    "updatedAt": "2026-02-28T18:00:00.000Z",
+    "tags": ["audit", "compliance", "read-only"]
+  },
+  {
+    "id": "legacy-import",
+    "title": "Legacy CSV Import",
+    "description": "One-off importer from legacy spreadsheets. Scheduled for retirement.",
+    "status": "archived",
+    "owner": "Team Core",
+    "updatedAt": "2025-11-05T11:45:00.000Z",
+    "tags": ["import", "legacy", "csv"]
+  }
+]
