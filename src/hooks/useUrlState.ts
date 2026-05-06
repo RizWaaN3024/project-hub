@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@/types";
+import type { ProjectStatus } from "@/types";
 import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 export type UrlState = {
