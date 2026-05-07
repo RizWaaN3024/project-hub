@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import projectsData from "./data/projects.json";
 import type { Project } from "./types";
-import { Text } from "@/ui-stub";
+import { Button, Text } from "@/ui-stub";
 import { useUrlState } from "@/hooks/useUrlState";
-import { filterProjects } from "@/utils/filterProjects";
+import { useProjects } from "@/hooks/useProjects";
 import { ProjectList } from "@/features/list/ProjectList";
+import { ProjectListSkeleton } from "@/features/list/ProjectListSkeleton";
 import { Filters } from "@/features/list/Filters";
 import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import "./App.css";
@@ -13,7 +14,11 @@ const projects = projectsData as Project[];
 
 export default function App() {
   const { state, setState } = useUrlState();
-  const filtered = filterProjects(projects, state);
+  const { data: filtered, loading, error, retry } = useProjects(
+    state.q,
+    state.status,
+    state.tags,
+  );
   const selected = projects.find((p) => p.id === state.selected) ?? null;
 
   const allTags = useMemo(() => {
@@ -22,6 +27,13 @@ export default function App() {
     return Array.from(set).sort();
   }, []);
 
+  const isInitialLoad = loading && filtered.length === 0 && !error;
+  const statusMessage = isInitialLoad
+    ? "Loading projects"
+    : error
+      ? `Error: ${error.message}`
+      : `Showing ${filtered.length} of ${projects.length} projects`;
+
   return (
     <div className="app-shell">
       <main aria-labelledby="app-title">
@@ -29,14 +41,35 @@ export default function App() {
           Project Hub Lite
         </Text>
         <Filters state={state} setState={setState} allTags={allTags} />
-        <Text tone="muted" className="mb-3">
-          Showing {filtered.length} of {projects.length} projects
+
+        <Text
+          tone="muted"
+          className="mb-3"
+          role="status"
+          aria-live="polite"
+        >
+          {statusMessage}
         </Text>
-        <ProjectList
-          projects={filtered}
-          selectedId={state.selected}
-          onSelect={(id) => setState({ selected: id })}
-        />
+
+        {error && !loading && (
+          <div className="mb-3 rounded-md border border-red-200 bg-red-50 p-3">
+            <Text tone="body" className="!mb-2 text-red-800">
+              {error.message}
+            </Text>
+            <Button onClick={retry}>Retry</Button>
+          </div>
+        )}
+
+        {isInitialLoad ? (
+          <ProjectListSkeleton />
+        ) : !error ? (
+          <ProjectList
+            projects={filtered}
+            selectedId={state.selected}
+            onSelect={(id) => setState({ selected: id })}
+          />
+        ) : null}
+
         {selected && (
           <ProjectDetail
             project={selected}
