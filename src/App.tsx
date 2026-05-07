@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from "react";
-import projectsData from "./data/projects.json";
-import type { Project } from "./types";
 import { Button, Text } from "@/ui-stub";
 import { useUrlState } from "@/hooks/useUrlState";
 import { useProjects } from "@/hooks/useProjects";
+import { useAllProjects } from "@/hooks/useAllProjects";
 import { ProjectList } from "@/features/list/ProjectList";
 import { ProjectListSkeleton } from "@/features/list/ProjectListSkeleton";
 import { EmptyState } from "@/features/list/EmptyState";
@@ -12,9 +11,8 @@ import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import { CopyLinkButton } from "@/features/shared/CopyLinkButton";
 import "./App.css";
 
-const projects = projectsData as Project[];
-
 export default function App() {
+  const projects = useAllProjects();
   const { state, setState } = useUrlState();
   const { data: filtered, loading, error, retry } = useProjects(
     state.q,
@@ -27,7 +25,7 @@ export default function App() {
     const set = new Set<string>();
     for (const p of projects) for (const t of p.tags) set.add(t);
     return Array.from(set).sort();
-  }, []);
+  }, [projects]);
 
   const isInitialLoad = loading && filtered.length === 0 && !error;
   const isEmpty = !loading && !error && filtered.length === 0;
