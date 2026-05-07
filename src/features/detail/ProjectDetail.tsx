@@ -1,4 +1,4 @@
-import { useEffect, useRef, type KeyboardEvent } from "react";
+import { useEffect, useRef } from "react";
 import { Button, Text } from "@/ui-stub";
 import type { Project, ProjectStatus } from "@/types";
 
@@ -32,13 +32,6 @@ export function ProjectDetail({ project, onClose }: Props) {
     };
   }, []);
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      onClose();
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50">
       <div
@@ -53,7 +46,6 @@ export function ProjectDetail({ project, onClose }: Props) {
         aria-labelledby="detail-title"
         aria-describedby="detail-description"
         tabIndex={-1}
-        onKeyDown={handleKeyDown}
         className="detail-panel absolute right-0 top-0 flex h-full w-full max-w-md flex-col overflow-y-auto bg-white p-6 shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
       >
         <div className="flex items-start justify-between gap-2">

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import projectsData from "./data/projects.json";
 import type { Project } from "./types";
 import { Button, Text } from "@/ui-stub";
@@ -34,6 +34,50 @@ export default function App() {
 
   const clearFilters = () =>
     setState({ q: "", status: null, tags: [] });
+
+  // Global keyboard shortcuts:
+  //   "/"  → focus search (when not typing and panel is closed)
+  //   Esc  → close detail panel (works even from inside an input)
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const isTypingInInput =
+        !!target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (e.key === "Escape") {
+        if (state.selected) {
+          e.preventDefault();
+          setState({ selected: null });
+        }
+        return;
+      }
+
+      if (isTypingInInput) return;
+
+      if (
+        e.key === "/" &&
+        !state.selected &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey
+      ) {
+        e.preventDefault();
+        const input = document.getElementById(
+          "filter-search",
+        ) as HTMLInputElement | null;
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [state.selected, setState]);
 
   return (
     <div className="app-shell">
