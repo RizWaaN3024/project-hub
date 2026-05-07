@@ -9,6 +9,8 @@ import { EmptyState } from "@/features/list/EmptyState";
 import { Filters } from "@/features/list/Filters";
 import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import { CopyLinkButton } from "@/features/shared/CopyLinkButton";
+import { CreateProjectButton } from "@/features/projects/CreateProjectButton";
+import { Toaster } from "sonner";
 import "./App.css";
 
 export default function App() {
@@ -86,6 +88,7 @@ export default function App() {
       >
         Skip to projects
       </a>
+      <Toaster richColors position="bottom-right" closeButton />
       <div className="app-shell">
         <main aria-labelledby="app-title">
           <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
@@ -97,7 +100,10 @@ export default function App() {
                 Browse, filter, and share internal projects.
               </Text>
             </div>
-            <CopyLinkButton />
+            <div className="flex items-center gap-2">
+              <CopyLinkButton />
+              <CreateProjectButton onCreated={() => retry()} />
+            </div>
           </div>
           <Filters state={state} setState={setState} allTags={allTags} />
 
