@@ -9,6 +9,7 @@ import { ProjectListSkeleton } from "@/features/list/ProjectListSkeleton";
 import { EmptyState } from "@/features/list/EmptyState";
 import { Filters } from "@/features/list/Filters";
 import { ProjectDetail } from "@/features/detail/ProjectDetail";
+import { CopyLinkButton } from "@/features/shared/CopyLinkButton";
 import "./App.css";
 
 const projects = projectsData as Project[];
@@ -82,9 +83,12 @@ export default function App() {
   return (
     <div className="app-shell">
       <main aria-labelledby="app-title">
-        <Text as="h1" id="app-title" tone="title">
-          Project Hub Lite
-        </Text>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <Text as="h1" id="app-title" tone="title" className="!mb-0">
+            Project Hub Lite
+          </Text>
+          <CopyLinkButton />
+        </div>
         <Filters state={state} setState={setState} allTags={allTags} />
 
         {!error && (
