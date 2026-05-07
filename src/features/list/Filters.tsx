@@ -1,7 +1,10 @@
-import type { ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { Button, Stack, Text } from "@/ui-stub";
 import type { ProjectStatus } from "@/types";
 import type { UrlState } from "@/hooks/useUrlState";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 type Props = {
   state: UrlState;
@@ -20,8 +23,24 @@ export function Filters({ state, setState, allTags }: Props) {
   const hasActiveFilters =
     state.q.length > 0 || state.status !== null || state.tags.length > 0;
 
+  // Local input state so typing is responsive; URL is updated only after the
+  // user pauses (debounced). The URL remains the source of truth — we sync
+  // back to local state when it changes externally (back button, deep link).
+  const [searchInput, setSearchInput] = useState(state.q);
+  const debouncedSearch = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
+
+  useEffect(() => {
+    setSearchInput(state.q);
+  }, [state.q]);
+
+  useEffect(() => {
+    if (debouncedSearch !== state.q) {
+      setState({ q: debouncedSearch });
+    }
+  }, [debouncedSearch, state.q, setState]);
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setState({ q: e.target.value });
+    setSearchInput(e.target.value);
   };
 
   const handleStatus = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -57,7 +76,7 @@ export function Filters({ state, setState, allTags }: Props) {
           <input
             id="filter-search"
             type="search"
-            value={state.q}
+            value={searchInput}
             onChange={handleSearch}
             placeholder="Search title or description"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
