@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { Button, Stack, Text } from "@/ui-stub";
 import type { ProjectStatus } from "@/types";
 import type { UrlState } from "@/hooks/useUrlState";
@@ -29,15 +29,26 @@ export function Filters({ state, setState, allTags }: Props) {
   const [searchInput, setSearchInput] = useState(state.q);
   const debouncedSearch = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
 
+  // When state.q changes externally (Clear button, deep link, browser back),
+  // the push effect would otherwise run in the same commit with stale
+  // searchInput/debouncedSearch and overwrite the external change. The flag
+  // tells the push effect to skip exactly once after a URL→local sync.
+  const skipNextPushRef = useRef(false);
+
   useEffect(() => {
     setSearchInput(state.q);
+    skipNextPushRef.current = true;
   }, [state.q]);
 
   useEffect(() => {
-    if (debouncedSearch !== state.q) {
+    if (skipNextPushRef.current) {
+      skipNextPushRef.current = false;
+      return;
+    }
+    if (debouncedSearch === searchInput && debouncedSearch !== state.q) {
       setState({ q: debouncedSearch });
     }
-  }, [debouncedSearch, state.q, setState]);
+  }, [debouncedSearch, state.q, setState, searchInput]);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);

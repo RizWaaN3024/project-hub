@@ -6,6 +6,7 @@ import { useUrlState } from "@/hooks/useUrlState";
 import { useProjects } from "@/hooks/useProjects";
 import { ProjectList } from "@/features/list/ProjectList";
 import { ProjectListSkeleton } from "@/features/list/ProjectListSkeleton";
+import { EmptyState } from "@/features/list/EmptyState";
 import { Filters } from "@/features/list/Filters";
 import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import "./App.css";
@@ -28,11 +29,11 @@ export default function App() {
   }, []);
 
   const isInitialLoad = loading && filtered.length === 0 && !error;
-  const statusMessage = isInitialLoad
-    ? "Loading projects"
-    : error
-      ? `Error: ${error.message}`
-      : `Showing ${filtered.length} of ${projects.length} projects`;
+  const isEmpty = !loading && !error && filtered.length === 0;
+  const showList = !isInitialLoad && !error && filtered.length > 0;
+
+  const clearFilters = () =>
+    setState({ q: "", status: null, tags: [] });
 
   return (
     <div className="app-shell">
@@ -42,33 +43,43 @@ export default function App() {
         </Text>
         <Filters state={state} setState={setState} allTags={allTags} />
 
-        <Text
-          tone="muted"
-          className="mb-3"
-          role="status"
-          aria-live="polite"
-        >
-          {statusMessage}
-        </Text>
+        {!error && (
+          <Text
+            tone="muted"
+            className="mb-3"
+            role="status"
+            aria-live="polite"
+          >
+            {isInitialLoad
+              ? "Loading projects"
+              : `Showing ${filtered.length} of ${projects.length} projects`}
+          </Text>
+        )}
 
         {error && !loading && (
-          <div className="mb-3 rounded-md border border-red-200 bg-red-50 p-3">
-            <Text tone="body" className="!mb-2 text-red-800">
+          <div
+            role="alert"
+            className="mb-3 rounded-md border border-red-200 bg-red-50 p-4"
+          >
+            <Text as="h2" tone="title" className="!mb-1 text-red-800">
+              Couldn't load projects
+            </Text>
+            <Text tone="body" className="!mb-3 text-red-700">
               {error.message}
             </Text>
-            <Button onClick={retry}>Retry</Button>
+            <Button onClick={retry}>Try again</Button>
           </div>
         )}
 
-        {isInitialLoad ? (
-          <ProjectListSkeleton />
-        ) : !error ? (
+        {isInitialLoad && <ProjectListSkeleton />}
+        {showList && (
           <ProjectList
             projects={filtered}
             selectedId={state.selected}
             onSelect={(id) => setState({ selected: id })}
           />
-        ) : null}
+        )}
+        {isEmpty && <EmptyState onClearFilters={clearFilters} />}
 
         {selected && (
           <ProjectDetail
