@@ -90,10 +90,15 @@ export default function App() {
       </a>
       <div className="app-shell">
         <main aria-labelledby="app-title">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <Text as="h1" id="app-title" tone="title" className="!mb-0">
-              Project Hub Lite
-            </Text>
+          <div className="mb-6 flex items-start justify-between gap-3">
+            <div>
+              <Text as="h1" id="app-title" tone="title" className="!mb-0 !text-2xl !font-semibold tracking-tight">
+                Project Hub Lite
+              </Text>
+              <Text tone="muted" className="!mt-1">
+                Browse, filter, and share internal projects.
+              </Text>
+            </div>
             <CopyLinkButton />
           </div>
           <Filters state={state} setState={setState} allTags={allTags} />

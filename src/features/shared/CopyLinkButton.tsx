@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/ui-stub";
+import { Check, Link as LinkIcon } from "lucide-react";
 
 const FEEDBACK_DURATION_MS = 2000;
 
@@ -31,7 +31,7 @@ export function CopyLinkButton() {
     }
   };
 
-  const label = copied ? "Copied!" : failed ? "Copy failed" : "Copy link";
+  const label = copied ? "Copied" : failed ? "Copy failed" : "Copy link";
   const announcement = copied
     ? "Link copied to clipboard"
     : failed
@@ -40,9 +40,19 @@ export function CopyLinkButton() {
 
   return (
     <>
-      <Button variant="ghost" onClick={handleClick} aria-label="Copy link to current view">
-        {label}
-      </Button>
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-label="Copy link to current view"
+        className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
+      >
+        {copied ? (
+          <Check aria-hidden="true" className="h-4 w-4 text-emerald-600" />
+        ) : (
+          <LinkIcon aria-hidden="true" className="h-4 w-4 text-slate-500" />
+        )}
+        <span>{label}</span>
+      </button>
       <span role="status" aria-live="polite" className="sr-only">
         {announcement}
       </span>

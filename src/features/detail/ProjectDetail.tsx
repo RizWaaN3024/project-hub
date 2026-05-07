@@ -1,16 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Button, Text } from "@/ui-stub";
-import type { Project, ProjectStatus } from "@/types";
+import { X } from "lucide-react";
+import { Text } from "@/ui-stub";
+import type { Project } from "@/types";
+import { StatusBadge } from "@/features/shared/StatusBadge";
 
 type Props = {
   project: Project;
   onClose: () => void;
-};
-
-const STATUS_TONE: Record<ProjectStatus, string> = {
-  active: "bg-emerald-100 text-emerald-800",
-  paused: "bg-amber-100 text-amber-800",
-  archived: "bg-slate-200 text-slate-700",
 };
 
 export function ProjectDetail({ project, onClose }: Props) {
@@ -46,54 +42,64 @@ export function ProjectDetail({ project, onClose }: Props) {
         aria-labelledby="detail-title"
         aria-describedby="detail-description"
         tabIndex={-1}
-        className="detail-panel absolute right-0 top-0 flex h-full w-full max-w-md flex-col overflow-y-auto bg-white p-6 shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
+        className="detail-panel absolute right-0 top-0 flex h-full w-full max-w-md flex-col overflow-y-auto bg-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
       >
-        <div className="flex items-start justify-between gap-2">
-          <Text as="h2" id="detail-title" tone="title" className="!mb-0">
-            {project.title}
-          </Text>
-          <Button
-            variant="ghost"
+        <header className="flex items-start justify-between gap-3 border-b border-slate-200 px-6 py-4">
+          <div className="min-w-0 flex-1">
+            <div className="mb-2">
+              <StatusBadge status={project.status} />
+            </div>
+            <Text
+              as="h2"
+              id="detail-title"
+              tone="title"
+              className="!mb-0 break-words"
+            >
+              {project.title}
+            </Text>
+          </div>
+          <button
+            type="button"
             onClick={onClose}
             aria-label="Close detail panel"
-            className="!px-2 !py-0.5 text-lg leading-none"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
           >
-            ×
-          </Button>
-        </div>
+            <X className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </header>
 
-        <span
-          className={`mt-2 inline-block w-fit rounded px-2 py-0.5 text-xs font-medium ${STATUS_TONE[project.status]}`}
-        >
-          {project.status}
-        </span>
+        <div className="flex-1 px-6 py-4">
+          <Text as="p" id="detail-description" tone="body">
+            {project.description}
+          </Text>
 
-        <Text as="p" id="detail-description" tone="body" className="mt-3">
-          {project.description}
-        </Text>
+          <dl className="mt-5 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1.5 text-sm">
+            <dt className="font-medium text-slate-700">Owner</dt>
+            <dd className="text-slate-600">{project.owner}</dd>
+            <dt className="font-medium text-slate-700">Updated</dt>
+            <dd className="text-slate-600">
+              <time dateTime={project.updatedAt}>
+                {new Date(project.updatedAt).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </time>
+            </dd>
+          </dl>
 
-        <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1 text-sm">
-          <dt className="font-medium text-slate-700">Owner</dt>
-          <dd className="text-slate-600">{project.owner}</dd>
-          <dt className="font-medium text-slate-700">Updated</dt>
-          <dd className="text-slate-600">
-            <time dateTime={project.updatedAt}>
-              {new Date(project.updatedAt).toLocaleDateString()}
-            </time>
-          </dd>
-        </dl>
-
-        <div className="mt-4">
-          <span className="text-sm font-medium text-slate-700">Tags</span>
-          <div className="mt-1 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-700"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="mt-5">
+            <span className="text-sm font-medium text-slate-700">Tags</span>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </aside>
