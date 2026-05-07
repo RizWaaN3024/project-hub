@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Text } from "@/ui-stub";
 import { useUrlState } from "@/hooks/useUrlState";
 import { useProjects } from "@/hooks/useProjects";
@@ -10,6 +10,7 @@ import { Filters } from "@/features/list/Filters";
 import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import { CopyLinkButton } from "@/features/shared/CopyLinkButton";
 import { CreateProjectButton } from "@/features/projects/CreateProjectButton";
+import { EditProjectSheet } from "@/features/projects/EditProjectSheet";
 import { Toaster } from "sonner";
 import "./App.css";
 
@@ -22,6 +23,13 @@ export default function App() {
     state.tags,
   );
   const selected = projects.find((p) => p.id === state.selected) ?? null;
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const editingProject = projects.find((p) => p.id === editingId) ?? null;
+
+  const handleEdit = (id: string) => {
+    setEditingId(id);
+    if (state.selected) setState({ selected: null });
+  };
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
@@ -142,6 +150,7 @@ export default function App() {
                 projects={filtered}
                 selectedId={state.selected}
                 onSelect={(id) => setState({ selected: id })}
+                onEdit={handleEdit}
               />
             )}
             {isEmpty && <EmptyState onClearFilters={clearFilters} />}
@@ -151,6 +160,15 @@ export default function App() {
             <ProjectDetail
               project={selected}
               onClose={() => setState({ selected: null })}
+              onEdit={handleEdit}
+            />
+          )}
+
+          {editingProject && (
+            <EditProjectSheet
+              project={editingProject}
+              onClose={() => setEditingId(null)}
+              onUpdated={() => retry()}
             />
           )}
         </main>

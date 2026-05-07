@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { Text } from "@/ui-stub";
 import type { Project } from "@/types";
 import { StatusBadge } from "@/features/shared/StatusBadge";
@@ -7,9 +7,10 @@ import { StatusBadge } from "@/features/shared/StatusBadge";
 type Props = {
   project: Project;
   onClose: () => void;
+  onEdit: (id: string) => void;
 };
 
-export function ProjectDetail({ project, onClose }: Props) {
+export function ProjectDetail({ project, onClose, onEdit }: Props) {
   const panelRef = useRef<HTMLElement>(null);
 
   // Move keyboard focus to the panel on open and when a different project
@@ -58,14 +59,24 @@ export function ProjectDetail({ project, onClose }: Props) {
               {project.title}
             </Text>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close detail panel"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
-          >
-            <X className="h-4 w-4" aria-hidden="true" />
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => onEdit(project.id)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
+            >
+              <Pencil aria-hidden="true" className="h-3.5 w-3.5 text-slate-500" />
+              <span>Edit</span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close detail panel"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 px-4 py-4 sm:px-6">
