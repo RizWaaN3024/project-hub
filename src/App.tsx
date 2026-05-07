@@ -81,61 +81,71 @@ export default function App() {
   }, [state.selected, setState]);
 
   return (
-    <div className="app-shell">
-      <main aria-labelledby="app-title">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <Text as="h1" id="app-title" tone="title" className="!mb-0">
-            Project Hub Lite
-          </Text>
-          <CopyLinkButton />
-        </div>
-        <Filters state={state} setState={setState} allTags={allTags} />
-
-        {!error && (
-          <Text
-            tone="muted"
-            className="mb-3"
-            role="status"
-            aria-live="polite"
-          >
-            {isInitialLoad
-              ? "Loading projects"
-              : `Showing ${filtered.length} of ${projects.length} projects`}
-          </Text>
-        )}
-
-        {error && !loading && (
-          <div
-            role="alert"
-            className="mb-3 rounded-md border border-red-200 bg-red-50 p-4"
-          >
-            <Text as="h2" tone="title" className="!mb-1 text-red-800">
-              Couldn't load projects
+    <>
+      <a
+        href="#project-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-sky-600 focus:px-3 focus:py-2 focus:font-medium focus:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300"
+      >
+        Skip to projects
+      </a>
+      <div className="app-shell">
+        <main aria-labelledby="app-title">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <Text as="h1" id="app-title" tone="title" className="!mb-0">
+              Project Hub Lite
             </Text>
-            <Text tone="body" className="!mb-3 text-red-700">
-              {error.message}
-            </Text>
-            <Button onClick={retry}>Try again</Button>
+            <CopyLinkButton />
           </div>
-        )}
+          <Filters state={state} setState={setState} allTags={allTags} />
 
-        {isInitialLoad && <ProjectListSkeleton />}
-        {showList && (
-          <ProjectList
-            projects={filtered}
-            selectedId={state.selected}
-            onSelect={(id) => setState({ selected: id })}
-          />
-        )}
-        {isEmpty && <EmptyState onClearFilters={clearFilters} />}
+          {!error && (
+            <Text
+              tone="muted"
+              className="mb-3"
+              role="status"
+              aria-live="polite"
+            >
+              {isInitialLoad
+                ? "Loading projects"
+                : `Showing ${filtered.length} of ${projects.length} projects`}
+            </Text>
+          )}
 
-        {selected && (
-          <ProjectDetail
-            project={selected}
-            onClose={() => setState({ selected: null })}
-          />
-        )}
-      </main>
-    </div>
+          {error && !loading && (
+            <div
+              role="alert"
+              className="mb-3 rounded-md border border-red-200 bg-red-50 p-4"
+            >
+              <Text as="h2" tone="title" className="!mb-1 text-red-800">
+                Couldn't load projects
+              </Text>
+              <Text tone="body" className="!mb-3 text-red-700">
+                {error.message}
+              </Text>
+              <Button onClick={retry}>Try again</Button>
+            </div>
+          )}
+
+          <div id="project-content" tabIndex={-1} className="focus:outline-none">
+            {isInitialLoad && <ProjectListSkeleton />}
+            {showList && (
+              <ProjectList
+                projects={filtered}
+                selectedId={state.selected}
+                onSelect={(id) => setState({ selected: id })}
+              />
+            )}
+            {isEmpty && <EmptyState onClearFilters={clearFilters} />}
+          </div>
+
+          {selected && (
+            <ProjectDetail
+              project={selected}
+              onClose={() => setState({ selected: null })}
+            />
+          )}
+        </main>
+      </div>
+    </>
   );
 }
