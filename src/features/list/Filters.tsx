@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { Button, Stack, Text } from "@/ui-stub";
 import type { ProjectStatus } from "@/types";
 import type { UrlState } from "@/hooks/useUrlState";
@@ -105,18 +105,24 @@ export function Filters({ state, setState, allTags }: Props) {
           <label htmlFor="filter-status" className="text-sm font-medium text-slate-700">
             Status
           </label>
-          <select
-            id="filter-status"
-            value={state.status ?? ""}
-            onChange={handleStatus}
-            className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              id="filter-status"
+              value={state.status ?? ""}
+              onChange={handleStatus}
+              className="w-full appearance-none rounded-md border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
+            >
+              {STATUS_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden="true"
+              className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-1">

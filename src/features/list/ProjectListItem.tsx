@@ -35,12 +35,14 @@ export function ProjectListItem({ project, isSelected, onSelect }: Props) {
         />
       )}
       <div className="flex items-start justify-between gap-3">
-        <Text as="h3" tone="title" className="!mb-0">
+        <Text as="h3" tone="title" className="!mb-0 min-w-0 flex-1">
           {project.title}
         </Text>
-        <StatusBadge status={project.status} />
+        <div className="shrink-0">
+          <StatusBadge status={project.status} />
+        </div>
       </div>
-      <Text tone="muted" className="!mt-1 line-clamp-1">
+      <Text tone="muted" className="!mt-1 line-clamp-2 sm:line-clamp-1">
         {project.description}
       </Text>
       <div className="mt-3 flex flex-wrap items-center gap-1.5">

@@ -1,7 +1,13 @@
 .app-shell {
   max-width: 960px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .app-shell {
+    padding: 1.5rem;
+  }
 }
 
 @keyframes detail-slide-in {

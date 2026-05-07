@@ -26,6 +26,7 @@ The suite covers `filterProjects` (7 unit tests), `useDebouncedValue` (3 hook te
 - **Multi-tag filtering uses OR within tags, AND across categories.** A project matches if it contains *any* selected tag and *all other* filter categories also match. The alternative (AND-within) is too strict for the dataset and uncommon in production faceted-search UIs.
 - **"Side panel" is implemented as a sheet overlay**, not an inline split layout. Both readings of the brief are valid; the sheet pattern (fixed position, backdrop, click-outside-to-close) avoids the list reflowing on every selection. See [`docs/ai-transcripts/01-url-state-architecture.md`](docs/ai-transcripts/01-url-state-architecture.md) for the trade-off discussion.
 - **`@testing-library/user-event` was added** as a dev dependency. The brief lists it as an allowed testing utility ("Use fake timers (`vi.useFakeTimers`) or `waitFor` / `userEvent` as needed").
+- **`lucide-react` was added** as a runtime dependency for icons (close button, search prefix, copy-link, empty state, status dropdown chevron). Tree-shaken — adds ~5KB gzipped. Inline SVGs and unicode characters were the alternative; using a small icon library is the standard for production React UIs and produces consistent stroke widths and sizing across the app.
 - **Random fetch errors at 5% rate** in [`src/data/fakeApi.ts`](src/data/fakeApi.ts) so the error UI is exercised during dev. Refresh a few times to see the error banner.
 
 ## Debounce
@@ -92,4 +93,6 @@ The working fix was a `useRef` flag set by the URL→local sync effect and consu
 
 ## Bonus (Tailwind)
 
-**Yes, used Tailwind for new component styling.** All new UI in `src/features/` and the App shell uses Tailwind utilities (`flex`, `rounded-md`, `focus-visible:outline-2`, `animate-pulse`, `bg-emerald-100`, etc.). The provided `App.css` is retained and extended with two hand-written keyframes (`detail-slide-in`, `detail-backdrop-fade-in`) for the sheet animation, both wrapped in a `prefers-reduced-motion` guard. The provided `ui-stub.css` is untouched — the stub primitives still own their own styles.
+**Yes, used Tailwind for new component styling.** All new UI in `src/features/` and the App shell uses Tailwind utilities (`flex`, `rounded-md`, `focus-visible:outline-2`, `animate-pulse`, `bg-emerald-50`, etc.). The provided `App.css` is retained and extended with two hand-written keyframes (`detail-slide-in`, `detail-backdrop-fade-in`) for the sheet animation, both wrapped in a `prefers-reduced-motion` guard. The provided `ui-stub.css` is untouched — the stub primitives still own their own styles.
+
+A shared `StatusBadge` component in [`src/features/shared/StatusBadge.tsx`](src/features/shared/StatusBadge.tsx) renders the colored-dot status indicator in both the card list and the detail sheet to keep the visual language consistent. Lucide icons (`X`, `Search`, `Link`, `Check`, `SearchX`, `ChevronDown`) replaced earlier inline SVGs and unicode glyphs for predictable sizing and stroke weight across the app.

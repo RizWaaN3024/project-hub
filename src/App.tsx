@@ -90,12 +90,12 @@ export default function App() {
       </a>
       <div className="app-shell">
         <main aria-labelledby="app-title">
-          <div className="mb-6 flex items-start justify-between gap-3">
-            <div>
+          <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
               <Text as="h1" id="app-title" tone="title" className="!mb-0 !text-2xl !font-semibold tracking-tight">
                 Project Hub Lite
               </Text>
-              <Text tone="muted" className="!mt-1">
+              <Text tone="muted" className="!mt-1 hidden sm:block">
                 Browse, filter, and share internal projects.
               </Text>
             </div>

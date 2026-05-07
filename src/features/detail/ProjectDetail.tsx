@@ -44,7 +44,7 @@ export function ProjectDetail({ project, onClose }: Props) {
         tabIndex={-1}
         className="detail-panel absolute right-0 top-0 flex h-full w-full max-w-md flex-col overflow-y-auto bg-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500"
       >
-        <header className="flex items-start justify-between gap-3 border-b border-slate-200 px-6 py-4">
+        <header className="flex items-start justify-between gap-3 border-b border-slate-200 px-4 py-4 sm:px-6">
           <div className="min-w-0 flex-1">
             <div className="mb-2">
               <StatusBadge status={project.status} />
@@ -68,7 +68,7 @@ export function ProjectDetail({ project, onClose }: Props) {
           </button>
         </header>
 
-        <div className="flex-1 px-6 py-4">
+        <div className="flex-1 px-4 py-4 sm:px-6">
           <Text as="p" id="detail-description" tone="body">
             {project.description}
           </Text>

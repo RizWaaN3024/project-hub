@@ -7,7 +7,7 @@ type Props = {
 
 export function EmptyState({ onClearFilters }: Props) {
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-10 text-center">
+    <div className="rounded-md border border-slate-200 bg-white p-6 text-center sm:p-10">
       <div
         aria-hidden="true"
         className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500"
