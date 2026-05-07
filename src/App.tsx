@@ -6,6 +6,7 @@ import { useUrlState } from "@/hooks/useUrlState";
 import { filterProjects } from "@/utils/filterProjects";
 import { ProjectList } from "@/features/list/ProjectList";
 import { Filters } from "@/features/list/Filters";
+import { ProjectDetail } from "@/features/detail/ProjectDetail";
 import "./App.css";
 
 const projects = projectsData as Project[];
@@ -13,6 +14,7 @@ const projects = projectsData as Project[];
 export default function App() {
   const { state, setState } = useUrlState();
   const filtered = filterProjects(projects, state);
+  const selected = projects.find((p) => p.id === state.selected) ?? null;
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
@@ -35,6 +37,12 @@ export default function App() {
           selectedId={state.selected}
           onSelect={(id) => setState({ selected: id })}
         />
+        {selected && (
+          <ProjectDetail
+            project={selected}
+            onClose={() => setState({ selected: null })}
+          />
+        )}
       </main>
     </div>
   );
