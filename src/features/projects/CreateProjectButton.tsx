@@ -25,7 +25,7 @@ export function CreateProjectButton({ onCreated }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500 focus-visible:outline-offset-2"
+        className="inline-flex h-9 items-center gap-1.5 rounded-md bg-sky-600 px-3 text-sm font-medium text-white transition hover:bg-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500 focus-visible:outline-offset-2"
       >
         <Plus aria-hidden="true" className="h-4 w-4" />
         <span>New project</span>

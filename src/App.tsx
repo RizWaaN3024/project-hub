@@ -99,16 +99,21 @@ export default function App() {
       <Toaster richColors position="bottom-right" closeButton />
       <div className="app-shell">
         <main aria-labelledby="app-title">
-          <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+          <div className="mb-6 flex items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <Text as="h1" id="app-title" tone="title" className="!mb-0 !text-2xl !font-semibold tracking-tight">
+              <Text
+                as="h1"
+                id="app-title"
+                tone="title"
+                className="!mb-0 !text-xl !font-semibold tracking-tight sm:!text-2xl"
+              >
                 Project Hub Lite
               </Text>
               <Text tone="muted" className="!mt-1 hidden sm:block">
                 Browse, filter, and share internal projects.
               </Text>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <CopyLinkButton />
               <CreateProjectButton onCreated={() => retry()} />
             </div>
